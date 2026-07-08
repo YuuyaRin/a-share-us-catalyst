@@ -27,6 +27,7 @@ fi
 
 npx netlify deploy \
   --prod \
+  --no-build \
   --dir=dist \
   --functions=netlify/functions \
   --message "Daily 9AM public report $(date '+%Y-%m-%d')"
