@@ -1,0 +1,20 @@
+name: Daily public site rebuild
+
+on:
+  schedule:
+    # 01:00 UTC = 09:00 Beijing time, Monday-Friday.
+    # GitHub Actions cron is best-effort and can slip by a few minutes.
+    - cron: "0 1 * * 1-5"
+  workflow_dispatch: {}
+
+jobs:
+  trigger-netlify-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Netlify build hook
+        run: |
+          if [ -z "${{ secrets.NETLIFY_BUILD_HOOK_URL }}" ]; then
+            echo "NETLIFY_BUILD_HOOK_URL secret is not set." >&2
+            exit 1
+          fi
+          curl --fail --silent --show-error -X POST "${{ secrets.NETLIFY_BUILD_HOOK_URL }}"
